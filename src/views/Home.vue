@@ -18,6 +18,27 @@
       </div>
     </div>
   </div>
+  <!-- 账单列表 -->
+  <ul class="account-list">
+    <li>
+      <div class="info">
+        <div>2021-01-28</div>
+        <div class="num">
+          <span class="spend">支 0.00</span>
+          <span>收 1000.00</span>
+        </div>
+      </div>
+      <ul class="detail-list">
+        <li class="detail">
+          <div class="top">
+            <div>奖金</div>
+            <div class="money">+1000.00</div>
+          </div>
+          <div class="time">10:34</div>
+        </li>
+      </ul>
+    </li>
+  </ul>
   <!-- 分类弹框 -->
   <van-popup v-model:show="showDate" position="bottom" round style="height:70%">
     <div class="prop">
@@ -93,6 +114,50 @@ export default {
     display: flex;
     .spend {
       margin: 0 10px;
+    }
+  }
+}
+.account-list {
+  min-height: calc(100vh - 80px);
+  padding: 10px;
+  background-color: #f5f5f5;
+  .info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    color: #666;
+    font-size: 12px;
+    padding: 0 15px;
+    background-color: #f9f9f9;
+    .num {
+      span {
+        display: inline-block;
+      }
+      .spend {
+        margin-right: 20px;
+      }
+    }
+  }
+  .detail-list {
+    .detail {
+      height: 66px;
+      color: #666;
+      font-size: 14px;
+      padding: 0 15px;
+      background-color: #fff;
+      .top {
+        display: flex;
+        justify-content: space-between;
+        padding-top: 10px;
+        .money {
+          color: #ecbe25;
+          font-size: 16px;
+        }
+      }
+      .time {
+        margin-top: 10px;
+      }
     }
   }
 }
