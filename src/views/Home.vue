@@ -19,26 +19,64 @@
     </div>
   </div>
   <!-- 账单列表 -->
-  <ul class="account-list">
-    <li>
-      <div class="info">
-        <div>2021-01-28</div>
-        <div class="num">
-          <span class="spend">支 0.00</span>
-          <span>收 1000.00</span>
-        </div>
-      </div>
-      <ul class="detail-list">
-        <li class="detail">
-          <div class="top">
-            <div>奖金</div>
-            <div class="money">+1000.00</div>
+  <div class="account-wrap">
+    <ul class="account-list">
+      <li class="account-item">
+        <div class="info">
+          <div>2021-01-28</div>
+          <div class="num">
+            <span class="spend">支 0.00</span>
+            <span>收 1000.00</span>
           </div>
-          <div class="time">10:34</div>
-        </li>
-      </ul>
-    </li>
-  </ul>
+        </div>
+        <ul class="detail-list">
+          <li class="detail">
+            <div class="detail-item">
+              <div class="top">
+                <div>奖金</div>
+                <div class="money">+1000.00</div>
+              </div>
+              <div class="time">10:34</div>
+            </div>
+          </li>
+          <li class="detail">
+            <div class="top">
+              <div>奖金</div>
+              <div class="money">+1000.00</div>
+            </div>
+            <div class="time">10:34</div>
+          </li>
+        </ul>
+      </li>
+      <li class="account-item">
+        <div class="info">
+          <div>2021-01-28</div>
+          <div class="num">
+            <span class="spend">支 0.00</span>
+            <span>收 1000.00</span>
+          </div>
+        </div>
+        <ul class="detail-list">
+          <li class="detail">
+            <div class="detail-item">
+              <div class="top">
+                <div>奖金</div>
+                <div class="money">+1000.00</div>
+              </div>
+              <div class="time">10:34</div>
+            </div>
+          </li>
+          <li class="detail">
+            <div class="top">
+              <div>奖金</div>
+              <div class="money">+1000.00</div>
+            </div>
+            <div class="time">10:34</div>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </div>
   <!-- 分类弹框 -->
   <van-popup v-model:show="showDate" position="bottom" round style="height:70%">
     <div class="prop">
@@ -117,10 +155,16 @@ export default {
     }
   }
 }
-.account-list {
+.account-wrap {
   min-height: calc(100vh - 80px);
   padding: 10px;
   background-color: #f5f5f5;
+}
+.account-list {
+  .account-item {
+    margin-bottom: 20px;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.1);
+  }
   .info {
     display: flex;
     justify-content: space-between;
@@ -146,6 +190,9 @@ export default {
       font-size: 14px;
       padding: 0 15px;
       background-color: #fff;
+      .detail-item {
+        border-bottom: 1px solid #f5f5f5;
+      }
       .top {
         display: flex;
         justify-content: space-between;
@@ -156,7 +203,7 @@ export default {
         }
       }
       .time {
-        margin-top: 10px;
+        margin: 10px 0;
       }
     }
   }
