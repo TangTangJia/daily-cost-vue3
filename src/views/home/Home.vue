@@ -1,7 +1,7 @@
 <template>
   <div class="header">
-    <div class="type">
-      <div @click="showDate = true">全部类型</div>
+    <div class="type" @click="showType = true">
+      <div>全部类型</div>
       <div class="line">|</div>
       <div>
         <van-icon name="apps-o" size="18" />
@@ -78,39 +78,21 @@
     </ul>
   </div>
   <!-- 分类弹框 -->
-  <van-popup v-model:show="showDate" position="bottom" round style="height:70%">
-    <div class="prop">
-      <div class="item">全部类型</div>
-      <div class="spend">
-        <div class="title">支出</div>
-        <ul class="list">
-          <li class="item">餐饮</li>
-          <li class="item">服饰</li>
-          <li class="item">交通</li>
-          <li class="item">学习</li>
-        </ul>
-      </div>
-      <div class="income">
-        <div class="title">收入</div>
-        <ul class="list">
-          <li class="item">工资</li>
-          <li class="item">奖金</li>
-          <li class="item">转账</li>
-          <li class="item">理财</li>
-        </ul>
-      </div>
-    </div>
-  </van-popup>
+  <TypePopup v-model:showType="showType" />
 </template>
 
 <script>
 import { ref } from "vue";
+import TypePopup from "./components/TypePopup";
 export default {
   name: "Home",
+  components: {
+    TypePopup
+  },
   setup() {
-    const showDate = ref(false);
+    const showType = ref(false);
     return {
-      showDate
+      showType
     };
   }
 };
