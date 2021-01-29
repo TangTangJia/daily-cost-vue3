@@ -44,4 +44,27 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.prop {
+  padding: 20px;
+  .title {
+    color: #666;
+    font-size: 14px;
+    margin-top: 10px;
+  }
+  .list {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  .item {
+    width: 105px;
+    height: 45px;
+    color: #666;
+    text-align: center;
+    line-height: 45px;
+    background-color: #f5f5f5;
+    margin-top: 10px;
+  }
+}
+</style>
