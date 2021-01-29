@@ -77,6 +77,10 @@
       </li>
     </ul>
   </div>
+  <!-- 添加账单气泡 -->
+  <div class="popover">
+    <van-icon name="records" size="22" />
+  </div>
   <!-- 分类弹框 -->
   <TypePopup v-model:showType="showType" />
 </template>
@@ -190,27 +194,18 @@ export default {
     }
   }
 }
-.prop {
-  padding: 20px;
-  .title {
-    color: #666;
-    font-size: 14px;
-    margin-top: 10px;
-  }
-  .list {
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-  }
-  .item {
-    width: 105px;
-    height: 45px;
-    color: #666;
-    text-align: center;
-    line-height: 45px;
-    background-color: #f5f5f5;
-    margin-top: 10px;
-  }
+.popover {
+  position: fixed;
+  bottom: 100px;
+  right: 20px;
+  color: #39be77;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  line-height: 52px;
+  border-radius: 50%;
+  background-color: #fff;
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.2);
 }
 </style>
 <style lang="less">
