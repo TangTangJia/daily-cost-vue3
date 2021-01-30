@@ -8,7 +8,7 @@
       </div>
     </div>
     <div class="total">
-      <div class="date">
+      <div class="date" @click="showMonth = true">
         2021-01
         <i class="iconfont sort-down"></i>
       </div>
@@ -83,20 +83,25 @@
   </div>
   <!-- 分类弹框 -->
   <TypePopup v-model:showType="showType" />
+  <Month v-model:showMonth="showMonth" />
 </template>
 
 <script>
 import { ref } from "vue";
 import TypePopup from "./components/TypePopup";
+import Month from "@/components/Month";
 export default {
   name: "Home",
   components: {
-    TypePopup
+    TypePopup,
+    Month
   },
   setup() {
     const showType = ref(false);
+    const showMonth = ref(false);
     return {
-      showType
+      showType,
+      showMonth
     };
   }
 };
