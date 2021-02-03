@@ -2,7 +2,14 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import store from "./store";
-import { Tabbar, TabbarItem, Icon, Popup, DatetimePicker } from "vant";
+import {
+  Tabbar,
+  TabbarItem,
+  Icon,
+  Popup,
+  DatetimePicker,
+  Progress
+} from "vant";
 import "vant/lib/index.css"; // 全局引入样式
 import "./styles/index.less";
 createApp(App)
@@ -13,4 +20,5 @@ createApp(App)
   .use(Icon)
   .use(Popup)
   .use(DatetimePicker)
+  .use(Progress)
   .mount("#app");

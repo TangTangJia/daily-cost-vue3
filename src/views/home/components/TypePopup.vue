@@ -1,5 +1,5 @@
 <template>
-  <van-popup v-model:show="show" @click-overlay="toggle" position="bottom" round style="height:70%">
+  <van-popup :show="showType" @click-overlay="toggle" position="bottom" round style="height:70%">
     <div class="prop">
       <div class="item">全部类型</div>
       <div class="spend">
@@ -25,19 +25,19 @@
 </template>
 
 <script>
-import { reactive, toRefs } from "vue";
+// import { reactive, toRefs } from "vue";
 export default {
   props: ["showType"],
   setup(props, context) {
-    const { showType } = toRefs(props);
-    const state = reactive({
-      show: showType
-    });
+    // const { showType } = toRefs(props);
+    // const state = reactive({
+    //   show: showType
+    // });
     const toggle = () => {
       context.emit("update:showType", false);
     };
     return {
-      ...toRefs(state),
+      // ...toRefs(state),
       toggle
     };
   }
