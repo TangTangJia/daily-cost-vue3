@@ -1,8 +1,6 @@
 import axios from "axios";
-import { getToken, setToken } from "../token";
-import { Message } from "element-ui";
+import { Toast } from "vant";
 import router from "../../router";
-import store from "@/store";
 // import store from '@/store'
 
 // axios 配置
@@ -13,14 +11,6 @@ axios.defaults.baseURL = root;
 // 添加请求拦截器
 axios.interceptors.request.use(
   function (config) {
-    // 发送请求前处理
-    if (getToken()) {
-      config.headers.Authorization = getToken();
-    }
-    if (store.state.user.preview) {
-      config.headers.Preview = store.state.user.preview;
-    }
-    config.headers.Accept = "application/x.myapp.v1+json";
     return config;
   },
   function (error) {
@@ -30,31 +20,21 @@ axios.interceptors.request.use(
 );
 
 // 响应拦截器
-axios.interceptors.response.use(
-  function (response) {
-    // 对响应数据处理
-    const token = response.headers.authorization;
-    if (token) {
-      setToken(token);
-    }
-    return response.data;
-  },
-  function (error) {
-    if (error.message.includes("timeout")) {
-      Message.error("请求超时");
-    } else if (error.response.status === 401) {
-      // 登录失效
-      const redirect = window.location.href;
-      window.location.href =
-        process.env.VUE_APP_AUTH_URL + "/login?redirect=" + redirect;
-    } else if (error.response.status === 404) {
-      router.push("/404");
-      store.commit("SET_MORE", false);
-    }
-    // 响应错误处理
-    return Promise.reject(error);
+axios.interceptors.response.use(function (response) {
+  // 对响应数据处理
+  if (typeof response.data !== "object") {
+    Toast.fail("服务端异常！");
+    return Promise.reject(response);
   }
-);
+  if (response.data.code != 200) {
+    if (response.data.msg) Toast.fail(response.data.msg);
+    if (response.data.code == 401) {
+      router.push({ path: "/login" });
+    }
+    return Promise.reject(response.data);
+  }
+  return response.data;
+});
 
 // GET 请求
 export function GET (url, params) {
