@@ -36,7 +36,7 @@
                 <div>{{ sv.type_name }}</div>
                 <div class="money">{{ sv.amount }}</div>
               </div>
-              <div class="time">{{ format(sv.date) }}</div>
+              <div class="time">{{ dayjs(sv.date).format("HH:mm") }}</div>
             </div>
           </li>
         </ul>
@@ -50,24 +50,29 @@
   <!-- 分类弹框 -->
   <TypePopup v-model:showType="showType" @select="selectType" />
   <Month v-model:showMonth="showMonth" @select="selectMonth" />
+  <AddPopup v-model:showAdd="showAdd" />
 </template>
 
 <script>
-import { reactive, ref, toRefs, onMounted, getCurrentInstance } from "vue";
+import { reactive, ref, toRefs, onMounted } from "vue";
 import TypePopup from "./components/TypePopup";
 import Month from "@/components/Month";
+import AddPopup from "./components/AddPopup";
 import dayjs from "dayjs";
+import $http from "@/util/request/api";
 export default {
   name: "Home",
   components: {
     TypePopup,
-    Month
+    Month,
+    AddPopup
   },
   setup() {
-    const $http = getCurrentInstance().appContext.config.globalProperties.$http;
     const showType = ref(false);
     const showMonth = ref(false);
+    const showAdd = ref(true);
     const data = reactive({
+      dayjs: dayjs,
       date: dayjs(new Date()).format("YYYY-MM"),
       type: "all",
       accountList: []
@@ -97,6 +102,7 @@ export default {
     return {
       showType,
       showMonth,
+      showAdd,
       selectMonth,
       ...toRefs(data),
       getAcountList,

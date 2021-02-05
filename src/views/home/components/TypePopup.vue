@@ -29,11 +29,11 @@
 </template>
 
 <script>
-import { getCurrentInstance, onMounted, reactive, toRefs } from "vue";
+import { onMounted, reactive, toRefs } from "vue";
+import $http from "@/util/request/api";
 export default {
   props: ["showType"],
   setup(props, context) {
-    const $http = getCurrentInstance().appContext.config.globalProperties.$http;
     const data = reactive({
       currentId: -1,
       expense: [],
@@ -68,7 +68,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .prop {
   padding: 20px;
   .title {

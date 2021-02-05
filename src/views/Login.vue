@@ -60,17 +60,17 @@
 </template>
 
 <script>
-import { reactive, toRefs, ref, getCurrentInstance } from "vue";
+import { reactive, toRefs, ref } from "vue";
 import VueImgVerify from "../components/VueImageVerify.vue";
 import { useRouter } from "vue-router";
 import { Toast } from "vant";
+import $http from "@/util/request/api";
 export default {
   name: "Login",
   components: {
     VueImgVerify
   },
   setup() {
-    const $http = getCurrentInstance().appContext.config.globalProperties.$http;
     const router = useRouter();
     const verifyRef = ref(null);
     const state = reactive({

@@ -10,7 +10,7 @@
 export default {};
 </script>
 
-<style lang="scss" scoped>
+<style lang="less" scoped>
 .about {
   height: 100vh;
   padding: 10px;
