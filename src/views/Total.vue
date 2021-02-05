@@ -91,13 +91,16 @@ export default {
     const state = reactive({
       type: "expense" // 账单类型
     });
+
+    onMounted(() => {
+      setPie();
+    });
+
     const changeType = type => {
       console.log(type);
       state.type = type;
     };
-    onMounted(() => {
-      setPie();
-    });
+
     // 绘制饼图
     const setPie = () => {
       Echarts = echarts.init(document.getElementById("pie"));

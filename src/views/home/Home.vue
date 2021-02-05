@@ -77,6 +77,11 @@ export default {
       type: "all",
       accountList: []
     });
+
+    onMounted(() => {
+      getAcountList();
+    });
+
     const selectMonth = value => {
       data.date = value;
       getAcountList();
@@ -96,9 +101,7 @@ export default {
           data.accountList = list;
         });
     };
-    onMounted(() => {
-      getAcountList();
-    });
+
     return {
       showType,
       showMonth,

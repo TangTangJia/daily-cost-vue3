@@ -40,17 +40,16 @@ export default {
       income: []
     });
 
-    const toggle = () => {
-      context.emit("update:showType", false);
-    };
-
     onMounted(() => {
       $http.getTypeList().then(({ data: { list } }) => {
-        console.log(list);
         data.expense = list.filter(i => i.type == 1);
         data.income = list.filter(i => i.type == 2);
       });
     });
+
+    const toggle = () => {
+      context.emit("update:showType", false);
+    };
 
     const selectType = v => {
       data.currentId = v;

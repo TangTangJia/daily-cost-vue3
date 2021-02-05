@@ -58,7 +58,6 @@ export default {
 
     onMounted(() => {
       $http.getTypeList().then(({ data: { list } }) => {
-        console.log(list);
         state.expense = list.filter(i => i.type == 1);
         state.income = list.filter(i => i.type == 2);
       });
