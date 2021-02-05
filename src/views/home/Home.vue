@@ -21,57 +21,23 @@
   <!-- 账单列表 -->
   <div class="account-wrap">
     <ul class="account-list">
-      <li class="account-item">
+      <li class="account-item" v-for="(v, i) in accountList" :key="i">
         <div class="info">
-          <div>2021-01-28</div>
+          <div>{{ v.date }}</div>
           <div class="num">
             <span class="spend">支 0.00</span>
             <span>收 1000.00</span>
           </div>
         </div>
         <ul class="detail-list">
-          <li class="detail">
+          <li class="detail" v-for="sv in v.bills" :key="sv.id">
             <div class="detail-item">
               <div class="top">
-                <div>奖金</div>
-                <div class="money">+1000.00</div>
+                <div>{{ sv.type_name }}</div>
+                <div class="money">{{ sv.amount }}</div>
               </div>
-              <div class="time">10:34</div>
+              <div class="time">{{ format(sv.date) }}</div>
             </div>
-          </li>
-          <li class="detail">
-            <div class="top">
-              <div>奖金</div>
-              <div class="money">+1000.00</div>
-            </div>
-            <div class="time">10:34</div>
-          </li>
-        </ul>
-      </li>
-      <li class="account-item">
-        <div class="info">
-          <div>2021-01-28</div>
-          <div class="num">
-            <span class="spend">支 0.00</span>
-            <span>收 1000.00</span>
-          </div>
-        </div>
-        <ul class="detail-list">
-          <li class="detail">
-            <div class="detail-item">
-              <div class="top">
-                <div>奖金</div>
-                <div class="money">+1000.00</div>
-              </div>
-              <div class="time">10:34</div>
-            </div>
-          </li>
-          <li class="detail">
-            <div class="top">
-              <div>奖金</div>
-              <div class="money">+1000.00</div>
-            </div>
-            <div class="time">10:34</div>
           </li>
         </ul>
       </li>
@@ -103,27 +69,39 @@ export default {
     const showMonth = ref(false);
     const data = reactive({
       date: dayjs(new Date()).format("YYYY-MM"),
-      type: "all"
+      type: "all",
+      accountList: []
     });
     const selectMonth = value => {
       data.date = value;
+      getAcountList();
     };
     const selectType = value => {
-      console.log(value);
-      data.type = value;
+      data.type = value === -1 ? "all" : value;
+      getAcountList();
+    };
+    const format = v => {
+      return dayjs(v).format("HH:mm");
     };
     // 获取账单列表
     const getAcountList = () => {
-      $http.getAcountList();
+      $http
+        .getAcountList({ date: data.date, type_id: data.type, page: 1 })
+        .then(({ data: { list } }) => {
+          data.accountList = list;
+        });
     };
-    onMounted(() => {});
+    onMounted(() => {
+      getAcountList();
+    });
     return {
       showType,
       showMonth,
       selectMonth,
       ...toRefs(data),
       getAcountList,
-      selectType
+      selectType,
+      format
     };
   }
 };

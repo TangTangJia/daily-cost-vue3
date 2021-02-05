@@ -55,6 +55,7 @@ export default {
     const selectType = v => {
       data.currentId = v;
       context.emit("select", v);
+      toggle();
     };
 
     return {

@@ -21,6 +21,7 @@ export default {
       context.emit("update:showMonth", false);
     };
     const confirm = value => {
+      console.log(value);
       context.emit("select", dayjs(value).format("YYYY-MM"));
       toggle();
     };
