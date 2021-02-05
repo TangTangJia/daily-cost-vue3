@@ -1,5 +1,5 @@
 <template>
-  <van-popup :show="showAdd" @click-overlay="toggle" position="bottom" round style="height:70%">
+  <van-popup :show="showAdd" @click-overlay="toggle" position="bottom" round style="height:62%">
     <div class="popup">
       <div class="top">
         <div class="btn-sure">确定</div>
@@ -18,13 +18,25 @@
         <span class="sufix">¥</span>
         <span class="amount animation">{{ amount }}</span>
       </div>
-      <ul class="type">
-        <li>
-          <div>
-            <!-- <i :class="['iconfont', typeMap[item.id].icon]"></i> -->
+      <!-- 支出类型 -->
+      <ul class="type" v-if="type === 'expense'">
+        <li v-for="v in expense" :key="v.id" @click="selectType(v.id)">
+          <div :class="['type-icon', { active: currentId === v.id }]">
+            <i :class="['iconfont', typeMap[v.id].icon]"></i>
           </div>
+          <div class="type-name">{{ v.name }}</div>
         </li>
       </ul>
+      <!-- 收入类型 -->
+      <ul class="type" v-else>
+        <li v-for="v in income" :key="v.id" @click="selectType(v.id)">
+          <div :class="['type-icon', { now: currentId === v.id }]">
+            <i :class="['iconfont', typeMap[v.id].icon]"></i>
+          </div>
+          <div class="type-name">{{ v.name }}</div>
+        </li>
+      </ul>
+      <van-number-keyboard show="true" extra-key="." @input="onInput" @delete="onDelete" />
     </div>
   </van-popup>
 </template>
@@ -32,12 +44,24 @@
 <script>
 import { reactive, toRefs, onMounted } from "vue";
 import { typeMap } from "@/util/global";
+import $http from "@/util/request/api";
 export default {
   props: ["showAdd"],
   setup(props, context) {
     const state = reactive({
       type: "expense", // 账单类型
-      typeMap: typeMap
+      typeMap: typeMap,
+      currentId: 1,
+      expense: [],
+      income: []
+    });
+
+    onMounted(() => {
+      $http.getTypeList().then(({ data: { list } }) => {
+        console.log(list);
+        state.expense = list.filter(i => i.type == 1);
+        state.income = list.filter(i => i.type == 2);
+      });
     });
 
     const toggle = () => {
@@ -45,15 +69,25 @@ export default {
     };
 
     const changeType = type => {
+      console.log(type);
       state.type = type;
+      state.currentId = type === "expense" ? 1 : 11;
     };
 
-    onMounted(() => {});
+    const selectType = id => {
+      state.currentId = id;
+    };
 
+    const onInput = () => {};
+
+    const onDelete = () => {};
     return {
       toggle,
       ...toRefs(state),
-      changeType
+      changeType,
+      selectType,
+      onInput,
+      onDelete
     };
   }
 };
@@ -149,6 +183,40 @@ export default {
   }
   100% {
     background-color: white;
+  }
+}
+.type {
+  display: flex;
+  padding-bottom: 10px;
+  margin: 0 30px;
+  margin-top: 20px;
+  overflow-x: auto;
+  li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 20px;
+  }
+  .type-icon {
+    width: 32px;
+    height: 32px;
+    color: rgba(0, 0, 0, 0.5);
+    text-align: center;
+    line-height: 32px;
+    background-color: #f5f5f5;
+    border-radius: 50%;
+    &.active {
+      color: #fff;
+      background-color: #39be77;
+    }
+    &.now {
+      color: #fff;
+      background-color: #ecbe25;
+    }
+  }
+  .type-name {
+    color: #666;
+    font-size: 12px;
   }
 }
 </style>

@@ -13,7 +13,8 @@ import {
   Form,
   Field,
   Cell,
-  CellGroup
+  CellGroup,
+  NumberKeyboard
 } from "vant";
 import "vant/lib/index.css"; // 全局引入样式
 import "./styles/index.less";
@@ -33,4 +34,5 @@ app.use(Field);
 app.use(Cell);
 app.use(CellGroup);
 app.use(Form);
+app.use(NumberKeyboard);
 app.mount("#app");

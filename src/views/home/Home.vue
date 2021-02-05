@@ -44,7 +44,7 @@
     </ul>
   </div>
   <!-- 添加账单气泡 -->
-  <div class="popover">
+  <div class="popover" @click="showAdd = true">
     <van-icon name="records" size="22" />
   </div>
   <!-- 分类弹框 -->
@@ -70,7 +70,7 @@ export default {
   setup() {
     const showType = ref(false);
     const showMonth = ref(false);
-    const showAdd = ref(true);
+    const showAdd = ref(false);
     const data = reactive({
       dayjs: dayjs,
       date: dayjs(new Date()).format("YYYY-MM"),
