@@ -7,6 +7,8 @@ import router from "../../router";
 const root = process.env.VUE_APP_API_URL;
 axios.defaults.timeout = 30 * 1000;
 axios.defaults.baseURL = root;
+axios.defaults.headers["Authorization"] = `${localStorage.getItem("token") ||
+  null}`;
 
 // 添加请求拦截器
 axios.interceptors.request.use(

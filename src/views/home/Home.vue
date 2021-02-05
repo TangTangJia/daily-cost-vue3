@@ -9,7 +9,7 @@
     </div>
     <div class="total">
       <div class="date" @click="showMonth = true">
-        2021-01
+        {{ date }}
         <i class="iconfont sort-down"></i>
       </div>
       <div class="money">
@@ -82,14 +82,15 @@
     <van-icon name="records" size="22" />
   </div>
   <!-- 分类弹框 -->
-  <TypePopup v-model:showType="showType" />
-  <Month v-model:showMonth="showMonth" />
+  <TypePopup v-model:showType="showType" @select="selectType" />
+  <Month v-model:showMonth="showMonth" @select="selectMonth" />
 </template>
 
 <script>
-import { ref } from "vue";
+import { reactive, ref, toRefs, onMounted, getCurrentInstance } from "vue";
 import TypePopup from "./components/TypePopup";
 import Month from "@/components/Month";
+import dayjs from "dayjs";
 export default {
   name: "Home",
   components: {
@@ -97,11 +98,32 @@ export default {
     Month
   },
   setup() {
+    const $http = getCurrentInstance().appContext.config.globalProperties.$http;
     const showType = ref(false);
     const showMonth = ref(false);
+    const data = reactive({
+      date: dayjs(new Date()).format("YYYY-MM"),
+      type: "all"
+    });
+    const selectMonth = value => {
+      data.date = value;
+    };
+    const selectType = value => {
+      console.log(value);
+      data.type = value;
+    };
+    // 获取账单列表
+    const getAcountList = () => {
+      $http.getAcountList();
+    };
+    onMounted(() => {});
     return {
       showType,
-      showMonth
+      showMonth,
+      selectMonth,
+      ...toRefs(data),
+      getAcountList,
+      selectType
     };
   }
 };

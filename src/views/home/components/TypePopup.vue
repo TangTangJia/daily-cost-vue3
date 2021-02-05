@@ -1,23 +1,27 @@
 <template>
   <van-popup :show="showType" @click-overlay="toggle" position="bottom" round style="height:70%">
     <div class="prop">
-      <div class="item">全部类型</div>
+      <div :class="['item', { active: currentId === -1 }]" @click="selectType(-1)">全部类型</div>
       <div class="spend">
         <div class="title">支出</div>
         <ul class="list">
-          <li class="item">餐饮</li>
-          <li class="item">服饰</li>
-          <li class="item">交通</li>
-          <li class="item">学习</li>
+          <li
+            :class="['item', { active: currentId === v.id }]"
+            v-for="v in expense"
+            :key="v.id"
+            @click="selectType(v.id)"
+          >{{ v.name }}</li>
         </ul>
       </div>
       <div class="income">
         <div class="title">收入</div>
         <ul class="list">
-          <li class="item">工资</li>
-          <li class="item">奖金</li>
-          <li class="item">转账</li>
-          <li class="item">理财</li>
+          <li
+            :class="['item', { active: currentId === v.id }]"
+            v-for="v in income"
+            :key="v.id"
+            @click="selectType(v.id)"
+          >{{ v.name }}</li>
         </ul>
       </div>
     </div>
@@ -25,20 +29,39 @@
 </template>
 
 <script>
-// import { reactive, toRefs } from "vue";
+import { getCurrentInstance, onMounted, reactive, toRefs } from "vue";
 export default {
   props: ["showType"],
   setup(props, context) {
-    // const { showType } = toRefs(props);
-    // const state = reactive({
-    //   show: showType
-    // });
+    const $http = getCurrentInstance().appContext.config.globalProperties.$http;
+    const data = reactive({
+      currentId: -1,
+      expense: [],
+      income: []
+    });
+
     const toggle = () => {
       context.emit("update:showType", false);
     };
+
+    onMounted(() => {
+      $http.getTypeList().then(({ data: { list } }) => {
+        console.log(list);
+        data.expense = list.filter(i => i.type == 1);
+        data.income = list.filter(i => i.type == 2);
+      });
+    });
+
+    const selectType = v => {
+      data.currentId = v;
+      context.emit("select", v);
+    };
+
     return {
       // ...toRefs(state),
-      toggle
+      toggle,
+      ...toRefs(data),
+      selectType
     };
   }
 };
@@ -65,6 +88,10 @@ export default {
     line-height: 45px;
     background-color: #f5f5f5;
     margin-top: 10px;
+    &.active {
+      color: #fff;
+      background-color: #39be77;
+    }
   }
 }
 </style>

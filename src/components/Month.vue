@@ -1,21 +1,33 @@
 <template>
   <van-popup :show="showMonth" @click-overlay="toggle" position="bottom" round style="height:45%">
-    <van-datetime-picker v-model="currentDate" @cancel="toggle" type="year-month" title="选择年月" />
+    <van-datetime-picker
+      v-model="currentDate"
+      @cancel="toggle"
+      @confirm="confirm"
+      type="year-month"
+      title="选择年月"
+    />
   </van-popup>
 </template>
 
 <script>
 import { ref } from "vue";
+import dayjs from "dayjs";
 export default {
   props: ["showMonth"],
   setup(props, context) {
-    const currentDate = ref("");
+    const currentDate = ref(new Date());
     const toggle = () => {
       context.emit("update:showMonth", false);
     };
+    const confirm = value => {
+      context.emit("select", dayjs(value).format("YYYY-MM"));
+      toggle();
+    };
     return {
       toggle,
-      currentDate
+      currentDate,
+      confirm
     };
   }
 };
