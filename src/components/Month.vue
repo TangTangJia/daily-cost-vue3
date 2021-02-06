@@ -4,7 +4,7 @@
       v-model="currentDate"
       @cancel="toggle"
       @confirm="confirm"
-      type="year-month"
+      :type="isDate ? 'date' : 'year-month'"
       title="选择年月"
     />
   </van-popup>
@@ -12,9 +12,9 @@
 
 <script>
 import { ref } from "vue";
-import dayjs from "dayjs";
+// import dayjs from "dayjs";
 export default {
-  props: ["showMonth"],
+  props: ["showMonth", "isDate"],
   setup(props, context) {
     const currentDate = ref(new Date());
     const toggle = () => {
@@ -22,7 +22,7 @@ export default {
     };
     const confirm = value => {
       console.log(value);
-      context.emit("select", dayjs(value).format("YYYY-MM"));
+      context.emit("select", value);
       toggle();
     };
     return {

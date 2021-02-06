@@ -49,8 +49,8 @@
   </div>
   <!-- 分类弹框 -->
   <TypePopup v-model:showType="showType" @select="selectType" />
-  <Month v-model:showMonth="showMonth" @select="selectMonth" />
-  <AddPopup v-model:showAdd="showAdd" />
+  <Month v-model:showMonth="showMonth" :isDate="false" @select="selectMonth" />
+  <AddPopup v-model:showAdd="showAdd" @add="addAccount" />
 </template>
 
 <script>
@@ -83,16 +83,19 @@ export default {
     });
 
     const selectMonth = value => {
-      data.date = value;
+      data.date = dayjs(value).format("YYYY-MM");
       getAcountList();
     };
+
     const selectType = value => {
       data.type = value === -1 ? "all" : value;
       getAcountList();
     };
+
     const format = v => {
       return dayjs(v).format("HH:mm");
     };
+
     // 获取账单列表
     const getAcountList = () => {
       $http
@@ -102,6 +105,9 @@ export default {
         });
     };
 
+    const addAccount = () => {
+      getAcountList();
+    };
     return {
       showType,
       showMonth,
@@ -110,7 +116,8 @@ export default {
       ...toRefs(data),
       getAcountList,
       selectType,
-      format
+      format,
+      addAccount
     };
   }
 };

@@ -2,15 +2,15 @@
   <van-popup :show="showAdd" @click-overlay="toggle" position="bottom" round style="height:62%">
     <div class="popup">
       <div class="top">
-        <div class="btn-sure">确定</div>
+        <div class="btn-sure" @click="onSubmit">确定</div>
       </div>
       <div class="title">
         <div class="tabs">
           <div :class="{ active: type === 'expense' }" @click="changeType('expense')">支出</div>
           <div :class="{ active: type === 'income' }" @click="changeType('income')">收入</div>
         </div>
-        <div class="date">
-          02-05
+        <div class="date" @click="showMonth = true">
+          {{ day }}
           <i class="iconfont sort-down"></i>
         </div>
       </div>
@@ -20,7 +20,7 @@
       </div>
       <!-- 支出类型 -->
       <ul class="type" v-if="type === 'expense'">
-        <li v-for="v in expense" :key="v.id" @click="selectType(v.id)">
+        <li v-for="v in expense" :key="v.id" @click="selectType(v.id, v.name)">
           <div :class="['type-icon', { active: currentId === v.id }]">
             <i :class="['iconfont', typeMap[v.id].icon]"></i>
           </div>
@@ -29,31 +29,42 @@
       </ul>
       <!-- 收入类型 -->
       <ul class="type" v-else>
-        <li v-for="v in income" :key="v.id" @click="selectType(v.id)">
+        <li v-for="v in income" :key="v.id" @click="selectType(v.id, v.name)">
           <div :class="['type-icon', { now: currentId === v.id }]">
             <i :class="['iconfont', typeMap[v.id].icon]"></i>
           </div>
           <div class="type-name">{{ v.name }}</div>
         </li>
       </ul>
-      <van-number-keyboard show="true" extra-key="." @input="onInput" @delete="onDelete" />
+      <van-number-keyboard :show="true" extra-key="." @input="onInput" @delete="onDelete" />
     </div>
+    <Month v-model:showMonth="showMonth" :isDate="true" @select="selectMonth" />
   </van-popup>
 </template>
 
 <script>
-import { reactive, toRefs, onMounted } from "vue";
+import { reactive, toRefs, onMounted, ref } from "vue";
 import { typeMap } from "@/util/global";
 import $http from "@/util/request/api";
+import Month from "@/components/Month";
+import dayjs from "dayjs";
 export default {
   props: ["showAdd"],
+  components: {
+    Month
+  },
   setup(props, context) {
+    const showMonth = ref(false);
     const state = reactive({
       type: "expense", // 账单类型
       typeMap: typeMap,
       currentId: 1,
+      currentName: "餐饮",
+      amount: "",
       expense: [],
-      income: []
+      income: [],
+      date: new Date(),
+      day: dayjs(new Date()).format("MM-DD")
     });
 
     onMounted(() => {
@@ -71,22 +82,61 @@ export default {
       console.log(type);
       state.type = type;
       state.currentId = type === "expense" ? 1 : 11;
+      state.currentName = type === "expense" ? "餐饮" : "工资";
     };
 
-    const selectType = id => {
+    const selectType = (id, name) => {
       state.currentId = id;
+      state.currentName = name;
     };
 
-    const onInput = () => {};
+    const selectMonth = value => {
+      state.date = value;
+      state.day = dayjs(value).format("MM-DD");
+      console.log(value);
+      console.log(state.day);
+    };
+
+    const onInput = v => {
+      // 当输入的值为 '.' 且 已经存在 '.'，则不让其继续字符串相加。
+      if (v == "." && state.amount.includes(".")) return;
+      // 小数点后保留两位，当超过两位时，不让其字符串继续相加。
+      if (
+        v != "." &&
+        state.amount.includes(".") &&
+        state.amount &&
+        state.amount.split(".")[1].length >= 2
+      )
+        return;
+      state.amount += v;
+    };
 
     const onDelete = () => {};
+    // 提交账单
+    const onSubmit = () => {
+      const params = {
+        amount: Number(state.amount).toFixed(2),
+        type_id: state.currentId,
+        type_name: state.currentName,
+        date: dayjs(state.date).unix() * 1000,
+        pay_type: state.payType == "expense" ? 1 : 2
+      };
+      $http.addAccount(params).then(() => {
+        context.emit("add");
+        toggle();
+      });
+    };
+
     return {
       toggle,
+      showMonth,
       ...toRefs(state),
       changeType,
       selectType,
       onInput,
-      onDelete
+      onDelete,
+      selectMonth,
+      onSubmit
     };
   }
 };
