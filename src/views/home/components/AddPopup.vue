@@ -50,6 +50,7 @@ import Month from "@/components/Month";
 import dayjs from "dayjs";
 export default {
   props: ["showAdd"],
+  emits: ["add", "update:showAdd"],
   components: {
     Month
   },
@@ -111,7 +112,10 @@ export default {
       state.amount += v;
     };
 
-    const onDelete = () => {};
+    const onDelete = () => {
+      state.amount = state.amount.slice(0, state.amount.length - 1);
+    };
+
     // 提交账单
     const onSubmit = () => {
       const params = {

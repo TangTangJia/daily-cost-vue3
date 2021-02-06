@@ -15,6 +15,7 @@ import { ref } from "vue";
 // import dayjs from "dayjs";
 export default {
   props: ["showMonth", "isDate"],
+  emits: ["select", "update:showMonth"],
   setup(props, context) {
     const currentDate = ref(new Date());
     const toggle = () => {

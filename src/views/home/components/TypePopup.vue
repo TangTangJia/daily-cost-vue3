@@ -33,6 +33,7 @@ import { onMounted, reactive, toRefs } from "vue";
 import $http from "@/util/request/api";
 export default {
   props: ["showType"],
+  emits: ["select", "update:showType"],
   setup(props, context) {
     const data = reactive({
       currentId: -1,

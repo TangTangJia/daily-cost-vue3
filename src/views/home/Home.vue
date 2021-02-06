@@ -164,7 +164,7 @@ export default {
 }
 .account-wrap {
   min-height: calc(100vh - 80px);
-  padding: 10px;
+  padding: 10px 10px 50px 10px;
   background-color: #f5f5f5;
 }
 .account-list {
